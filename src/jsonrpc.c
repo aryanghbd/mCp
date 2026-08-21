@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
+#include <errno.h>
 #define CHUNK_SIZE 1024 // read 1kb at a time lol
 #define MAX_METHOD_NAME_LENGTH 256
 
@@ -111,7 +113,7 @@ char *read_jsonrpc_message() {
     //first we need to validate the validity of the structure
 
     // json-rpc REQUESTS obey this format: {"jsonrpc": "2.0", "method": "method_name", "params": { ... }, "id": 1}, validate shape
-    return 0;
+    return buffer;
 }
 
 int main(void) {
@@ -120,7 +122,8 @@ int main(void) {
         printf("Read JSON-RPC message: %s\n", message);
         free(message);
     } else {
-        fprintf(stderr, "Failed to read JSON-RPC message\n");
+        // specify error too
+        fprintf(stderr, "Failed to read JSON-RPC message: %s\n", strerror(errno));
     }
     return 0;
 }
